@@ -1,0 +1,30 @@
+// Root build.gradle for MultiVPN project
+
+plugins {
+    id 'com.android.application' version '8.5.0' apply false
+    id 'com.android.library' version '8.5.0' apply false
+    id 'org.jetbrains.kotlin.android' version '1.9.10' apply false
+    id 'com.google.gms.google-services' version '4.4.0' apply false
+    id 'com.google.firebase.crashlytics' version '2.9.9' apply false
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+ext {
+    // SDK versions
+    compileSdkVersion = 34
+    minSdkVersion = 24
+    targetSdkVersion = 34
+    
+    // Dependency versions
+    kotlinVersion = '1.9.10'
+    androidxVersion = '1.6.1'
+    lifecycleVersion = '2.6.2'
+    roomVersion = '2.6.0'
+    retrofitVersion = '2.10.0'
+    firebaseVersion = '32.7.0'
+    firebaseCrashlyticsVersion = '18.6.0'
+    kotlinCoroutinesVersion = '1.7.3'
+}

@@ -1,0 +1,58 @@
+# Gradle files
+.gradle
+build/
+*.apk
+*.ap_
+*.aab
+
+# Local configuration file
+local.properties
+
+# Log/OS files
+*.log
+.DS_Store
+
+# Android Studio
+.idea/
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/gradle.xml
+.idea/dictionaries
+.idea/vcs.xml
+.idea/jsLibraryMappings.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+.idea/caches
+.idea/modules.xml
+*.iml
+*.iws
+*.ipr
+
+# Android build artifacts
+/local.properties
+.classpath
+.project
+.settings/
+.checkstyle
+gen-external-apklibs
+
+# Lint
+lint-results.xml
+lint-results-debug.xml
+
+# Coverage
+coverage.xml
+.coverage
+
+# Keystore files
+*.jks
+*.keystore
+
+# Node modules (if using React Native or Node tools)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Environment files
+.env
+.env.local
