@@ -14,8 +14,12 @@ class XrayCore(private val pluginManager: PluginManager) : PluginCore {
     override val displayName = "XRAY"
     override val description = "Downloadable XRAY core"
     override fun isEnabled() = pluginManager.isEnabled(id)
-    override fun onEnable() = pluginManager.enablePlugin(id)
-    override fun onDisable() = pluginManager.disablePlugin(id)
+    override fun onEnable() {
+        pluginManager.enablePlugin(id)
+    }
+    override fun onDisable() {
+        pluginManager.disablePlugin(id)
+    }
 }
 
 class SingCore(private val pluginManager: PluginManager) : PluginCore {
@@ -23,8 +27,12 @@ class SingCore(private val pluginManager: PluginManager) : PluginCore {
     override val displayName = "SING"
     override val description = "Downloadable SING core"
     override fun isEnabled() = pluginManager.isEnabled(id)
-    override fun onEnable() = pluginManager.enablePlugin(id)
-    override fun onDisable() = pluginManager.disablePlugin(id)
+    override fun onEnable() {
+        pluginManager.enablePlugin(id)
+    }
+    override fun onDisable() {
+        pluginManager.disablePlugin(id)
+    }
 }
 
 class BixCore(private val pluginManager: PluginManager) : PluginCore {
@@ -32,8 +40,12 @@ class BixCore(private val pluginManager: PluginManager) : PluginCore {
     override val displayName = "BIX"
     override val description = "Downloadable BIX core"
     override fun isEnabled() = pluginManager.isEnabled(id)
-    override fun onEnable() = pluginManager.enablePlugin(id)
-    override fun onDisable() = pluginManager.disablePlugin(id)
+    override fun onEnable() {
+        pluginManager.enablePlugin(id)
+    }
+    override fun onDisable() {
+        pluginManager.disablePlugin(id)
+    }
 }
 
 class ClashCore(private val pluginManager: PluginManager) : PluginCore {
@@ -41,6 +53,10 @@ class ClashCore(private val pluginManager: PluginManager) : PluginCore {
     override val displayName = "CLASH"
     override val description = "Downloadable CLASH core"
     override fun isEnabled() = pluginManager.isEnabled(id)
-    override fun onEnable() = pluginManager.enablePlugin(id)
-    override fun onDisable() = pluginManager.disablePlugin(id)
+    override fun onEnable() {
+        pluginManager.enablePlugin(id)
+    }
+    override fun onDisable() {
+        pluginManager.disablePlugin(id)
+    }
 }

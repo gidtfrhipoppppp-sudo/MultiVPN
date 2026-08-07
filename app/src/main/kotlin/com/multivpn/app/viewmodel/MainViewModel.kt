@@ -5,16 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.multivpn.app.domain.repository.VpnRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 
 /**
  * ViewModel for MainActivity
  */
-@HiltViewModel
-class MainViewModel @Inject constructor(
+class MainViewModel(
     private val vpnRepository: VpnRepository
 ) : ViewModel() {
 

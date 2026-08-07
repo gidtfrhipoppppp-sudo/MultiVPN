@@ -1,0 +1,34 @@
+{
+  "plugins": [
+    {
+      "name": "Tor",
+      "path": "Plugins/Tor/tor.tar.gz",
+      "fileName": "tor.tar.gz",
+      "archive": true
+    },
+    {
+      "name": "ByeDPI",
+      "path": "Plugins/ByeDPI/byedpi.tar.gz",
+      "fileName": "byedpi.tar.gz",
+      "archive": true
+    },
+    {
+      "name": "I2P",
+      "path": "Plugins/I2P/i2p.tar.gz",
+      "fileName": "i2p.tar.gz",
+      "archive": true
+    },
+    {
+      "name": "Sing-box",
+      "path": "Plugins/Sing-box/sing-box.tar.gz",
+      "fileName": "sing-box.tar.gz",
+      "archive": true
+    },
+    {
+      "name": "Xray",
+      "path": "Plugins/Xray/xray",
+      "fileName": "xray",
+      "archive": false
+    }
+  ]
+}

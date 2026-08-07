@@ -8,7 +8,19 @@
         <item name="android:windowBackground">@color/background</item>
     </style>
 
+    <style name="Theme.AppCompat.Light.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:windowBackground">@color/background</item>
+    </style>
+
     <!-- Text styles -->
+    <style name="TextAppearance">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+
     <style name="TextAppearance.Headline1">
         <item name="android:textSize">32sp</item>
         <item name="android:textStyle">bold</item>

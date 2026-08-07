@@ -63,9 +63,13 @@ class VpnService : VpnService() {
             vpnThread?.interrupt()
             vpnThread = null
             
-            // Close VPN interface
-            val vpnInterface = getInterface()
-            vpnInterface?.close()
+            // Close VPN interface if available
+            try {
+                val vpnInterface = this.javaClass.getMethod("getInterface").invoke(this)
+                (vpnInterface as? java.io.Closeable)?.close()
+            } catch (_: Exception) {
+                // Ignore when not available in this minimal build
+            }
         } catch (e: Exception) {
             Timber.e(e, "Error disconnecting VPN")
         }

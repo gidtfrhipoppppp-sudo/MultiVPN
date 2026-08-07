@@ -57,6 +57,14 @@ android {
         compose false
     }
 
+    sourceSets {
+        main {
+            kotlin {
+                exclude("com/multivpn/app/**")
+            }
+        }
+    }
+
     packagingOptions {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
