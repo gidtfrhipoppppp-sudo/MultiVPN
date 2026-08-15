@@ -97,6 +97,84 @@ class PluginManager(
         }
     }
 
+    /**
+     * Install a custom (user-provided) core binary from a local input stream.
+     *
+     * The binary is copied into {@code cores/<id>/<binaryName>}, made executable
+     * and checked against {@link ServerBinaryDetector}. If the binary looks like
+     * a server (x86_64 Linux) build the install is refused with a clear error
+     * so the UI can show the "this is for a server" warning.
+     *
+     * @param id stable identifier for this custom core
+     * @param displayName human-readable name shown in the UI
+     * @param binaryName expected file name of the binary
+     * @param sourceName original file name / source label (for server detection)
+     * @param input stream providing the binary bytes; closed by this method
+     * @param onProgress invoked with status lines
+     * @return the installed binary path on success
+     */
+    fun installCustomBinary(
+        id: String,
+        displayName: String,
+        binaryName: String,
+        sourceName: String,
+        input: java.io.InputStream,
+        onProgress: (String) -> Unit
+    ): Result<String> {
+        val key = id.lowercase()
+        return try {
+            states[key] = CoreState.INSTALLING
+            onProgress("Copying $binaryName...")
+
+            val dir = coreDir(key).apply { mkdirs() }
+            val binary = File(dir, binaryName)
+            input.use { stream ->
+                FileOutputStream(binary).use { out -> stream.copyTo(out) }
+            }
+
+            // Refuse server builds before making them executable.
+            if (ServerBinaryDetector.isServerBinary(sourceName, binary)) {
+                binary.delete()
+                states[key] = CoreState.ERROR
+                onProgress("Rejected server binary: $sourceName")
+                return Result.failure(ServerBinaryException(sourceName))
+            }
+
+            makeExecutable(binary)
+            binaryPaths[key] = binary.absolutePath
+            states[key] = CoreState.INSTALLED
+            persistCustomCore(key, displayName, binaryName, binary.absolutePath)
+
+            onProgress("$displayName installed at ${binary.absolutePath}")
+            Result.success(binary.absolutePath)
+        } catch (e: Exception) {
+            states[key] = CoreState.ERROR
+            onProgress("Install failed: ${e.message}")
+            Result.failure(e)
+        }
+    }
+
+    /** List of installed custom (non-catalogue) cores. */
+    fun customCores(): List<CustomCoreInfo> {
+        val catalogueIds = setOf("sing-box", "xray", "clash")
+        return storageDir.listFiles { f -> f.isFile && f.extension == "json" }
+            ?.mapNotNull { file ->
+                val id = file.nameWithoutExtension.lowercase()
+                if (id in catalogueIds) return@mapNotNull null
+                try {
+                    val json = JSONObject(file.readText())
+                    CustomCoreInfo(
+                        id = id,
+                        displayName = json.optString("displayName", id),
+                        binaryName = json.optString("binaryName", id),
+                        binaryPath = json.optString("binaryPath", "")
+                    )
+                } catch (e: Exception) {
+                    null
+                }
+            } ?: emptyList()
+    }
+
     /** Remove a core's binary and persisted state. */
     fun uninstall(id: String): Boolean {
         val key = id.lowercase()
@@ -200,6 +278,17 @@ class PluginManager(
             .put("id", id)
             .put("binaryPath", binaryPath)
             .put("installed", true)
+        File(storageDir, "$id.json").writeText(manifest.toString())
+    }
+
+    private fun persistCustomCore(id: String, displayName: String, binaryName: String, binaryPath: String) {
+        val manifest = JSONObject()
+            .put("id", id)
+            .put("displayName", displayName)
+            .put("binaryName", binaryName)
+            .put("binaryPath", binaryPath)
+            .put("installed", true)
+            .put("custom", true)
         File(storageDir, "$id.json").writeText(manifest.toString())
     }
 }

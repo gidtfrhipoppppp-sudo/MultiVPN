@@ -1,6 +1,9 @@
 package com.multivpn.app.ui
 
+import android.app.AlertDialog
 import android.content.Intent
+import android.net.Uri
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,12 +13,14 @@ import android.widget.CheckBox
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.multivpn.app.R
 import com.multivpn.app.plugin.CoreState
 import com.multivpn.app.plugin.CoreStatus
 import com.multivpn.app.plugin.PluginCore
+import com.multivpn.app.plugin.ServerBinaryException
 import com.multivpn.app.plugin.PluginManager
 import com.multivpn.app.data.PreferenceHelper
 import com.multivpn.app.plugin.PluginRepository
@@ -36,6 +41,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var vpnToggleButton: Button
     private lateinit var settingsButton: Button
     private lateinit var connectionsButton: Button
+    private lateinit var addCustomPluginButton: Button
     private lateinit var addonRecyclerView: RecyclerView
     private lateinit var connectionListView: ListView
     private lateinit var logTextView: TextView
@@ -44,6 +50,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var analyticsCheckBox: CheckBox
 
     private val pluginAdapter by lazy { PluginListAdapter(emptyList()) { core -> downloadCore(core) } }
+
+    private val pickBinaryLauncher =
+        registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+            if (uri != null) installCustomBinary(uri)
+        }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +71,7 @@ class MainActivity : AppCompatActivity() {
         vpnToggleButton = findViewById(R.id.vpn_toggle_button)
         settingsButton = findViewById(R.id.settings_button)
         connectionsButton = findViewById(R.id.connections_button)
+        addCustomPluginButton = findViewById(R.id.addCustomPluginButton)
         addonRecyclerView = findViewById(R.id.addonListView)
         connectionListView = findViewById(R.id.connectionListView)
         logTextView = findViewById(R.id.logTextView)
@@ -81,6 +94,10 @@ class MainActivity : AppCompatActivity() {
 
         connectionsButton.setOnClickListener {
             startActivity(Intent(this, ConnectionStatsActivity::class.java))
+        }
+
+        addCustomPluginButton.setOnClickListener {
+            pickBinaryLauncher.launch("*/*")
         }
 
         autoConnectCheckBox.setOnCheckedChangeListener { _, isChecked ->
@@ -136,6 +153,52 @@ class MainActivity : AppCompatActivity() {
                 Timber.e(e, "Download failed for ${core.displayName}")
                 runOnUiThread {
                     appendLog("Download failed for ${core.displayName}: ${e.message}")
+                    pluginAdapter.update(pluginRepository.statuses())
+                }
+            }
+        }
+    }
+
+    private fun installCustomBinary(uri: Uri) {
+        val sourceName = uri.lastPathSegment ?: uri.toString()
+        val displayName = sourceName.substringAfterLast('/').ifBlank { "Custom core" }
+        val binaryName = displayName.substringAfterLast('.').let {
+            if (it.isBlank() || it == displayName) displayName else displayName
+        }
+        val id = "custom-" + System.currentTimeMillis()
+
+        appendLog("Installing custom plugin: $displayName")
+        executor.execute {
+            val result = try {
+                contentResolver.openInputStream(uri)?.use { stream ->
+                    pluginManager.installCustomBinary(
+                        id = id,
+                        displayName = displayName,
+                        binaryName = binaryName,
+                        sourceName = sourceName,
+                        input = stream,
+                        onProgress = { line -> runOnUiThread { appendLog(line) } }
+                    )
+                } ?: Result.failure(java.io.IOException("Could not open selected file"))
+            } catch (e: Exception) {
+                Result.failure<String>(e)
+            }
+
+            runOnUiThread {
+                result.onSuccess { path ->
+                    appendLog("$displayName installed: $path")
+                    pluginAdapter.update(pluginRepository.statuses())
+                }.onFailure { error ->
+                    if (error is ServerBinaryException) {
+                        AlertDialog.Builder(this)
+                            .setTitle(R.string.server_binary_title)
+                            .setMessage(R.string.server_binary_message)
+                            .setPositiveButton(android.R.string.ok, null)
+                            .show()
+                        appendLog("Rejected: ${error.message}")
+                    } else {
+                        appendLog("Install failed: ${error.message}")
+                    }
                     pluginAdapter.update(pluginRepository.statuses())
                 }
             }

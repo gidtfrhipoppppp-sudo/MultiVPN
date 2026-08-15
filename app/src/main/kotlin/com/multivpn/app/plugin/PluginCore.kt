@@ -51,3 +51,21 @@ data class CoreStatus(
             CoreStatus(core, CoreState.NOT_INSTALLED, null, null)
     }
 }
+
+/**
+ * Metadata for a custom (user-installed) core, loaded from the persisted
+ * sidecar JSON so it can appear in the plugin list alongside catalogue cores.
+ */
+data class CustomCoreInfo(
+    val id: String,
+    val displayName: String,
+    val binaryName: String,
+    val binaryPath: String
+)
+
+/**
+ * Thrown when a user tries to install a binary that targets a server
+ * (x86_64 Linux) rather than an Android device.
+ */
+class ServerBinaryException(val sourceName: String) :
+    Exception("'$sourceName' is a server binary (x86_64 Linux), not an Android client build.")

@@ -13,6 +13,9 @@
     <string name="plugin_title">Downloadable cores</string>
     <string name="plugin_placeholder">XRAY, SING, and CLASH can be installed as plugins.</string>
     <string name="plugin_info_title">VPN cores</string>
+    <string name="add_custom_plugin">Add custom</string>
+    <string name="server_binary_title">Server binary detected</string>
+    <string name="server_binary_message">Это для сервера, идиот!</string>
     <string name="connection_stats">Connection Statistics</string>
     <string name="connection_summary">Recent domains and traffic</string>
     <string name="view_details">View detailed stats</string>

@@ -55,8 +55,8 @@ class PluginRepository(
     fun availableCores(): List<PluginCore> = cachedCores
 
     /** Status snapshot for every known core, reflecting install state. */
-    fun statuses(): List<CoreStatus> =
-        cachedCores.map { core ->
+    fun statuses(): List<CoreStatus> {
+        val catalogue = cachedCores.map { core ->
             CoreStatus(
                 core = core,
                 state = pluginManager.state(core.id),
@@ -64,6 +64,26 @@ class PluginRepository(
                 message = null
             )
         }
+        val custom = pluginManager.customCores().map { info ->
+            CoreStatus(
+                core = PluginCore(
+                    id = info.id,
+                    displayName = info.displayName,
+                    description = "Custom user-installed core",
+                    downloadUrl = "",
+                    fileName = info.binaryName,
+                    archiveFormat = ArchiveFormat.TAR_GZ,
+                    binaryName = info.binaryName,
+                    version = "",
+                    architecture = ""
+                ),
+                state = if (info.binaryPath.isNotEmpty()) CoreState.INSTALLED else CoreState.NOT_INSTALLED,
+                binaryPath = info.binaryPath.ifEmpty { null },
+                message = null
+            )
+        }
+        return catalogue + custom
+    }
 
     fun install(pluginManager: PluginManager, core: PluginCore): Boolean =
         pluginManager.isInstalled(core.id)
