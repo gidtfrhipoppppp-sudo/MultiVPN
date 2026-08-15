@@ -20,7 +20,6 @@ class PluginManagerTest {
     @Test
     fun uninstall_removesPersistedState() {
         val storageDir = createTempDir()
-        val manager = PluginManager(storageDir)
 
         // Simulate a previously persisted core so loadPersistedCores picks it up.
         val coreDir = File(storageDir, "xray").apply { mkdirs() }

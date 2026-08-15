@@ -138,5 +138,6 @@ dependencies {
     // Testing - Mockito
     testImplementation 'org.mockito.kotlin:mockito-kotlin:5.1.0'
     testImplementation 'org.mockito:mockito-core:5.7.0'
+    testImplementation 'org.json:json:20231013'
     androidTestImplementation 'org.mockito.kotlin:mockito-kotlin:5.1.0'
 }
