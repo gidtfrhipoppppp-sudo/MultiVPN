@@ -11,18 +11,20 @@ import androidx.appcompat.app.AppCompatActivity
 import com.multivpn.app.R
 import com.multivpn.app.plugin.PluginManager
 import com.multivpn.app.plugin.PluginRepository
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 /**
  * Main activity for the MultiVPN application
  */
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val pluginManager by lazy { PluginManager(cacheDir) }
     private val pluginRepository by lazy { PluginRepository(pluginManager) }
 
-    private lateinit var startStopButton: Button
-    private lateinit var oobeButton: Button
+    private lateinit var vpnToggleButton: Button
+    private lateinit var settingsButton: Button
     private lateinit var addonListView: ListView
     private lateinit var connectionListView: ListView
     private lateinit var logTextView: TextView
@@ -34,8 +36,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        startStopButton = findViewById(R.id.startStopButton)
-        oobeButton = findViewById(R.id.oobeButton)
+        vpnToggleButton = findViewById(R.id.vpn_toggle_button)
+        settingsButton = findViewById(R.id.settings_button)
         addonListView = findViewById(R.id.addonListView)
         connectionListView = findViewById(R.id.connectionListView)
         logTextView = findViewById(R.id.logTextView)
@@ -50,12 +52,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupUI() {
-        startStopButton.setOnClickListener {
+        vpnToggleButton.setOnClickListener {
             toggleVpnState()
         }
 
-        oobeButton.setOnClickListener {
-            showSetupGuide()
+        settingsButton.setOnClickListener {
+            navigateToSettings()
+        }
+
+        autoConnectCheckBox.setOnCheckedChangeListener { _, isChecked ->
+            Timber.d("Auto-connect set to $isChecked")
+        }
+        killSwitchCheckBox.setOnCheckedChangeListener { _, isChecked ->
+            Timber.d("Kill switch set to $isChecked")
+        }
+        analyticsCheckBox.setOnCheckedChangeListener { _, isChecked ->
+            Timber.d("Telemetry set to $isChecked")
         }
     }
 
@@ -76,18 +88,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun toggleVpnState() {
-        val currentText = startStopButton.text.toString()
+        val currentText = vpnToggleButton.text.toString()
         val nextText = if (currentText.equals(getString(R.string.connect), ignoreCase = true)) {
             getString(R.string.disconnect)
         } else {
             getString(R.string.connect)
         }
-        startStopButton.text = nextText
+        vpnToggleButton.text = nextText
         logTextView.text = "VPN state changed\n$nextText"
-    }
-
-    private fun showSetupGuide() {
-        logTextView.text = "Setup guide\nTap Start VPN to begin"
     }
 
     private fun navigateToSettings() {

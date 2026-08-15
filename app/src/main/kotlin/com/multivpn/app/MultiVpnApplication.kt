@@ -1,11 +1,13 @@
 package com.multivpn.app
 
 import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
 /**
  * Application class for MultiVPN
  */
+@HiltAndroidApp
 class MultiVpnApplication : Application() {
 
     override fun onCreate() {

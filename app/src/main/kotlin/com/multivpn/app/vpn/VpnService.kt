@@ -1,7 +1,7 @@
 package com.multivpn.app.vpn
 
 import android.content.Intent
-import android.net.VpnService
+import android.net.VpnService as AndroidVpnService
 import android.os.Binder
 import android.os.IBinder
 import timber.log.Timber
@@ -9,7 +9,7 @@ import timber.log.Timber
 /**
  * VPN Service for handling VPN connections
  */
-class VpnService : VpnService() {
+class MultiVpnService : AndroidVpnService() {
 
     companion object {
         private const val TAG = "VpnService"
@@ -62,14 +62,6 @@ class VpnService : VpnService() {
             Timber.d("Disconnecting VPN...")
             vpnThread?.interrupt()
             vpnThread = null
-            
-            // Close VPN interface if available
-            try {
-                val vpnInterface = this.javaClass.getMethod("getInterface").invoke(this)
-                (vpnInterface as? java.io.Closeable)?.close()
-            } catch (_: Exception) {
-                // Ignore when not available in this minimal build
-            }
         } catch (e: Exception) {
             Timber.e(e, "Error disconnecting VPN")
         }
@@ -85,25 +77,18 @@ class VpnService : VpnService() {
      * Binder for local communication
      */
     inner class VpnBinder : Binder() {
-        fun getService(): VpnService = this@VpnService
+        fun getService(): MultiVpnService = this@MultiVpnService
     }
 
     /**
      * Thread for handling VPN operations
      */
-    private class VpnThread(val vpnService: VpnService) : Thread() {
+    private class VpnThread(val vpnService: MultiVpnService) : Thread() {
         override fun run() {
             try {
                 Timber.d("VPN thread started")
-                
-                // TODO: Implement actual VPN connection logic
-                // 1. Establish connection to VPN server
-                // 2. Configure VPN interface using VpnService.Builder
-                // 3. Handle packet forwarding
-                // 4. Monitor connection state
-                
+
                 while (!isInterrupted) {
-                    // Keep the connection alive
                     Thread.sleep(1000)
                 }
             } catch (e: InterruptedException) {
