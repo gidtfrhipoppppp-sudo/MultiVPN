@@ -73,7 +73,7 @@ class ConnectionTracker(context: Context) {
      */
     fun snapshot(): List<ConnectionEntry> {
         val entries = domains.map { (domain, acc) ->
-            ConnectionEntry(domain, acc.tx.get(), acc.rx.get(), acc.count.get())
+            ConnectionEntry(domain, acc.tx.get(), acc.rx.get(), acc.count.get().toInt())
         }.sortedByDescending { it.uploadedBytes + it.downloadedBytes }
 
         if (!tracking) return entries
