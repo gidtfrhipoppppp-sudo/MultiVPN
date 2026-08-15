@@ -17,6 +17,7 @@ import com.multivpn.app.plugin.CoreState
 import com.multivpn.app.plugin.CoreStatus
 import com.multivpn.app.plugin.PluginCore
 import com.multivpn.app.plugin.PluginManager
+import com.multivpn.app.data.PreferenceHelper
 import com.multivpn.app.plugin.PluginRepository
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -34,6 +35,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var vpnToggleButton: Button
     private lateinit var settingsButton: Button
+    private lateinit var connectionsButton: Button
     private lateinit var addonRecyclerView: RecyclerView
     private lateinit var connectionListView: ListView
     private lateinit var logTextView: TextView
@@ -47,8 +49,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val prefs = PreferenceHelper(this)
+        if (!prefs.oobeCompleted) {
+            startActivity(Intent(this, OobeActivity::class.java))
+            finish()
+            return
+        }
+
         vpnToggleButton = findViewById(R.id.vpn_toggle_button)
         settingsButton = findViewById(R.id.settings_button)
+        connectionsButton = findViewById(R.id.connections_button)
         addonRecyclerView = findViewById(R.id.addonListView)
         connectionListView = findViewById(R.id.connectionListView)
         logTextView = findViewById(R.id.logTextView)
@@ -67,6 +77,10 @@ class MainActivity : AppCompatActivity() {
 
         settingsButton.setOnClickListener {
             navigateToSettings()
+        }
+
+        connectionsButton.setOnClickListener {
+            startActivity(Intent(this, ConnectionStatsActivity::class.java))
         }
 
         autoConnectCheckBox.setOnCheckedChangeListener { _, isChecked ->
