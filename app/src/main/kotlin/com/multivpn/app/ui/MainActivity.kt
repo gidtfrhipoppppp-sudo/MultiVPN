@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         addCustomPluginButton.setOnClickListener {
-            pickBinaryLauncher.launch("*/*")
+            pickBinaryLauncher.launch(arrayOf("*/*"))
         }
 
         autoConnectCheckBox.setOnCheckedChangeListener { _, isChecked ->
