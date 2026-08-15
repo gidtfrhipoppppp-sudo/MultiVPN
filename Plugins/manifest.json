@@ -1,34 +1,40 @@
 {
   "plugins": [
     {
-      "name": "Tor",
-      "path": "Plugins/Tor/tor.tar.gz",
-      "fileName": "tor.tar.gz",
-      "archive": true
-    },
-    {
-      "name": "ByeDPI",
-      "path": "Plugins/ByeDPI/byedpi.tar.gz",
-      "fileName": "byedpi.tar.gz",
-      "archive": true
-    },
-    {
-      "name": "I2P",
-      "path": "Plugins/I2P/i2p.tar.gz",
-      "fileName": "i2p.tar.gz",
-      "archive": true
-    },
-    {
-      "name": "Sing-box",
-      "path": "Plugins/Sing-box/sing-box.tar.gz",
+      "id": "sing-box",
+      "name": "Sing-box core",
+      "description": "Universal proxy platform by SagerNet",
+      "downloadUrl": "https://github.com/SagerNet/sing-box/releases/download/v1.13.18/sing-box-1.13.18-android-arm64.tar.gz",
       "fileName": "sing-box.tar.gz",
-      "archive": true
+      "archive": true,
+      "archiveFormat": "tar.gz",
+      "binaryName": "sing-box",
+      "version": "1.13.18",
+      "architecture": "android-arm64"
     },
     {
-      "name": "Xray",
-      "path": "Plugins/Xray/xray",
-      "fileName": "xray",
-      "archive": false
+      "id": "xray",
+      "name": "Xray core",
+      "description": "XTLS/Xray-core proxy platform",
+      "downloadUrl": "https://github.com/XTLS/Xray-core/releases/download/v26.3.27/Xray-android-arm64-v8a.zip",
+      "fileName": "xray.zip",
+      "archive": true,
+      "archiveFormat": "zip",
+      "binaryName": "xray",
+      "version": "26.3.27",
+      "architecture": "android-arm64-v8a"
+    },
+    {
+      "id": "clash",
+      "name": "Clash (mihomo) core",
+      "description": "MetaCubeX/mihomo Clash Meta core",
+      "downloadUrl": "https://github.com/MetaCubeX/mihomo/releases/download/v1.19.29/mihomo-android-arm64-v-v1.19.29.gz",
+      "fileName": "mihomo.gz",
+      "archive": true,
+      "archiveFormat": "gz",
+      "binaryName": "mihomo",
+      "version": "1.19.29",
+      "architecture": "android-arm64-v"
     }
   ]
 }

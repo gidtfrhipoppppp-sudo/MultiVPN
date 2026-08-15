@@ -54,15 +54,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:text="Live tunnel oscilloscope"
+            android:textColor="@color/text_primary"
+            android:textStyle="bold" />
+
+        <com.multivpn.app.ui.OscilloscopeView
+            android:id="@+id/oscilloscopeView"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:text="@string/plugin_title"
             android:textColor="@color/text_primary"
             android:textStyle="bold" />
 
-        <ListView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/addonListView"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:layout_marginTop="8dp" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:nestedScrollingEnabled="false" />
 
         <TextView
             android:layout_width="wrap_content"
