@@ -46,7 +46,6 @@
             android:name="com.multivpn.app.vpn.MultiVpnService"
             android:enabled="true"
             android:exported="false"
-            android:foregroundServiceType="vpn"
             android:permission="android.permission.BIND_VPN_SERVICE">
             <intent-filter>
                 <action android:name="android.net.VpnService" />
