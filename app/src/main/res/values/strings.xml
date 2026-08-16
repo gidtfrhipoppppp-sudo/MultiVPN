@@ -11,7 +11,7 @@
     <string name="vpn_connected">Connected</string>
     <string name="vpn_disconnected">Disconnected</string>
     <string name="plugin_title">Downloadable cores</string>
-    <string name="plugin_placeholder">XRAY, SING, and CLASH can be installed as plugins.</string>
+    <string name="plugin_placeholder">sing-box, Xray, Clash, Tor, DNSCrypt, ByeDPI, I2P and WARP can be installed as plugins.</string>
     <string name="plugin_info_title">VPN cores</string>
     <string name="add_custom_plugin">Add custom</string>
     <string name="server_binary_title">Server binary detected</string>

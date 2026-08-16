@@ -156,7 +156,7 @@ class PluginManager(
 
     /** List of installed custom (non-catalogue) cores. */
     fun customCores(): List<CustomCoreInfo> {
-        val catalogueIds = setOf("sing-box", "xray", "clash")
+        val catalogueIds = setOf("sing-box", "xray", "clash", "tor", "dnscrypt", "byedpi", "i2pd", "warp")
         return storageDir.listFiles { f -> f.isFile && f.extension == "json" }
             ?.mapNotNull { file ->
                 val id = file.nameWithoutExtension.lowercase()
