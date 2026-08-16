@@ -3,6 +3,8 @@ package com.multivpn.app.ui
 import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
+import android.net.VpnService
+import android.os.Build
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,6 +23,7 @@ import com.multivpn.app.plugin.CoreState
 import com.multivpn.app.plugin.CoreStatus
 import com.multivpn.app.plugin.PluginCore
 import com.multivpn.app.plugin.ServerBinaryException
+import com.multivpn.app.vpn.MultiVpnService
 import com.multivpn.app.plugin.PluginManager
 import com.multivpn.app.data.PreferenceHelper
 import com.multivpn.app.plugin.PluginRepository
@@ -50,6 +53,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var analyticsCheckBox: CheckBox
 
     private val pluginAdapter by lazy { PluginListAdapter(emptyList()) { core -> downloadCore(core) } }
+
+    private var vpnActive = false
+    private var selectedCoreId: String? = null
 
     private val pickBinaryLauncher =
         registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
@@ -206,14 +212,77 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun toggleVpnState() {
-        val currentText = vpnToggleButton.text.toString()
-        val nextText = if (currentText.equals(getString(R.string.connect), ignoreCase = true)) {
-            getString(R.string.disconnect)
-        } else {
-            getString(R.string.connect)
+        if (vpnActive) {
+            stopVpn()
+            return
         }
-        vpnToggleButton.text = nextText
-        logTextView.text = "VPN state changed\n$nextText"
+
+        // Find the first installed core to use as the proxy engine.
+        val statuses = pluginRepository.statuses()
+        val installed = statuses.firstOrNull {
+            it.state == com.multivpn.app.plugin.CoreState.INSTALLED && !it.binaryPath.isNullOrEmpty()
+        }
+        if (installed == null) {
+            appendLog("No core installed. Download a core (sing-box/Xray/Clash) first.")
+            AlertDialog.Builder(this)
+                .setTitle("No core installed")
+                .setMessage("Download and install a VPN core (sing-box, Xray, or Clash) before connecting.")
+                .setPositiveButton(android.R.string.ok, null)
+                .show()
+            return
+        }
+
+        selectedCoreId = installed.core.id
+        val binaryPath = installed.binaryPath!!
+        appendLog("Starting ${installed.core.displayName}...")
+
+        val prepareIntent = VpnService.prepare(this)
+        if (prepareIntent != null) {
+            vpnPrepareIntent = prepareIntent
+            vpnBinaryPath = binaryPath
+            startActivityForResult(prepareIntent, REQ_VPN_PERMISSION)
+        } else {
+            // Already authorised — start the service directly.
+            startVpnService(binaryPath)
+        }
+    }
+
+    private fun startVpnService(binaryPath: String) {
+        val serviceIntent = Intent(this, MultiVpnService::class.java).apply {
+            action = MultiVpnService.ACTION_CONNECT
+            putExtra(MultiVpnService.EXTRA_BINARY_PATH, binaryPath)
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(serviceIntent)
+        } else {
+            startService(serviceIntent)
+        }
+        vpnActive = true
+        vpnToggleButton.text = getString(R.string.disconnect)
+        appendLog("VPN service started")
+    }
+
+    private fun stopVpn() {
+        val serviceIntent = Intent(this, MultiVpnService::class.java).apply {
+            action = MultiVpnService.ACTION_DISCONNECT
+        }
+        startService(serviceIntent)
+        vpnActive = false
+        vpnToggleButton.text = getString(R.string.connect)
+        appendLog("VPN service stopped")
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQ_VPN_PERMISSION) {
+            if (resultCode == RESULT_OK && vpnBinaryPath != null) {
+                startVpnService(vpnBinaryPath!!)
+            } else {
+                appendLog("VPN permission denied")
+            }
+            vpnBinaryPath = null
+            vpnPrepareIntent = null
+        }
     }
 
     private fun navigateToSettings() {
@@ -228,9 +297,17 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        if (vpnActive) stopVpn()
         pluginRepository.shutdown()
         executor.shutdownNow()
         Timber.d("MainActivity destroyed")
+    }
+}
+    private var vpnBinaryPath: String? = null
+    private var vpnPrepareIntent: Intent? = null
+
+    companion object {
+        private const val REQ_VPN_PERMISSION = 1001
     }
 }
 
