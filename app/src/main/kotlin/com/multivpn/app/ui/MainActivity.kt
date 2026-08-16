@@ -56,6 +56,8 @@ class MainActivity : AppCompatActivity() {
 
     private var vpnActive = false
     private var selectedCoreId: String? = null
+    private var vpnBinaryPath: String? = null
+    private var vpnPrepareIntent: Intent? = null
 
     private val pickBinaryLauncher =
         registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
@@ -302,9 +304,6 @@ class MainActivity : AppCompatActivity() {
         executor.shutdownNow()
         Timber.d("MainActivity destroyed")
     }
-}
-    private var vpnBinaryPath: String? = null
-    private var vpnPrepareIntent: Intent? = null
 
     companion object {
         private const val REQ_VPN_PERMISSION = 1001
