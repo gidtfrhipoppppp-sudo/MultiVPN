@@ -71,7 +71,7 @@ MultiVPN/
 - Android Studio (Arctic Fox or newer)
 - JDK 11 or higher
 - Android SDK (API 34)
-- Gradle 8.2.0+
+- Gradle 8.7+ (provided via the Gradle wrapper: `./gradlew`)
 
 ### Installation
 

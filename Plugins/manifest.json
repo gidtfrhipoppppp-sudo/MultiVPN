@@ -1,34 +1,100 @@
 {
   "plugins": [
     {
-      "name": "Tor",
-      "path": "Plugins/Tor/tor.tar.gz",
-      "fileName": "tor.tar.gz",
-      "archive": true
-    },
-    {
-      "name": "ByeDPI",
-      "path": "Plugins/ByeDPI/byedpi.tar.gz",
-      "fileName": "byedpi.tar.gz",
-      "archive": true
-    },
-    {
-      "name": "I2P",
-      "path": "Plugins/I2P/i2p.tar.gz",
-      "fileName": "i2p.tar.gz",
-      "archive": true
-    },
-    {
-      "name": "Sing-box",
-      "path": "Plugins/Sing-box/sing-box.tar.gz",
+      "id": "sing-box",
+      "name": "Sing-box core",
+      "description": "Universal proxy platform by SagerNet. Supports VMess, VLESS, Trojan, Shadowsocks, Hysteria and more. Recommended for most setups.",
+      "downloadUrl": "https://github.com/SagerNet/sing-box/releases/download/v1.13.18/sing-box-1.13.18-android-arm64.tar.gz",
       "fileName": "sing-box.tar.gz",
-      "archive": true
+      "archive": true,
+      "archiveFormat": "tar.gz",
+      "binaryName": "sing-box",
+      "version": "1.13.18",
+      "architecture": "android-arm64"
     },
     {
-      "name": "Xray",
-      "path": "Plugins/Xray/xray",
-      "fileName": "xray",
-      "archive": false
+      "id": "xray",
+      "name": "Xray core",
+      "description": "XTLS/Xray-core. Best-in-class for VLESS/XTLS and Reality. Use when your server uses XTLS-Reality or VLESS.",
+      "downloadUrl": "https://github.com/XTLS/Xray-core/releases/download/v26.3.27/Xray-android-arm64-v8a.zip",
+      "fileName": "xray.zip",
+      "archive": true,
+      "archiveFormat": "zip",
+      "binaryName": "xray",
+      "version": "26.3.27",
+      "architecture": "android-arm64-v8a"
+    },
+    {
+      "id": "clash",
+      "name": "Clash (mihomo) core",
+      "description": "MetaCubeX/mihomo (Clash Meta). Rich rule-based routing and subscription support. Best for multi-server configs.",
+      "downloadUrl": "https://github.com/MetaCubeX/mihomo/releases/download/v1.19.29/mihomo-android-arm64-v-v1.19.29.gz",
+      "fileName": "mihomo.gz",
+      "archive": true,
+      "archiveFormat": "gz",
+      "binaryName": "mihomo",
+      "version": "1.19.29",
+      "architecture": "android-arm64-v"
+    },
+    {
+      "id": "tor",
+      "name": "Tor core",
+      "description": "The Tor Project. Anonymous communication over the Tor network. Distributed inside the Orbot APK — install Orbot from F-Droid/Play Store, then this entry launches the bundled tor binary. Alternatively, extract tor from the Orbot APK manually.",
+      "downloadUrl": "https://github.com/guardianproject/orbot-android/releases/download/17.9.5-RC-4-tor-0.4.9.11/Orbot-17.9.5-RC-4-tor-0.4.9.11-fullperm-universal-release.apk",
+      "fileName": "orbot.apk",
+      "archive": false,
+      "archiveFormat": "zip",
+      "binaryName": "tor",
+      "version": "0.4.9.11",
+      "architecture": "universal (from Orbot APK)"
+    },
+    {
+      "id": "dnscrypt",
+      "name": "DNSCrypt proxy",
+      "description": "DNSCrypt/dnscrypt-proxy. Flexible DNS proxy with support for encrypted DNS protocols (DNSCrypt, DoH, DoT) and ad-blocking via filter lists.",
+      "downloadUrl": "https://github.com/DNSCrypt/dnscrypt-proxy/releases/download/2.1.18/dnscrypt-proxy-android_arm64-2.1.18.zip",
+      "fileName": "dnscrypt-proxy.zip",
+      "archive": true,
+      "archiveFormat": "zip",
+      "binaryName": "dnscrypt-proxy",
+      "version": "2.1.18",
+      "architecture": "android-arm64"
+    },
+    {
+      "id": "byedpi",
+      "name": "ByeDPI",
+      "description": "hufrea/byedpi. Local DPI bypass proxy. Splits and manipulates packets to evade deep packet inspection. Lightweight, no server needed.",
+      "downloadUrl": "https://github.com/hufrea/byedpi/releases/download/v0.17.3/byedpi-17.3-aarch64.tar.gz",
+      "fileName": "byedpi.tar.gz",
+      "archive": true,
+      "archiveFormat": "tar.gz",
+      "binaryName": "ciadpi",
+      "version": "0.17.3",
+      "architecture": "aarch64"
+    },
+    {
+      "id": "i2pd",
+      "name": "I2P (i2pd)",
+      "description": "PurpleI2P/i2pd. End-to-end encrypted anonymous network layer. Provides I2P connectivity for .i2p sites and services.",
+      "downloadUrl": "https://github.com/PurpleI2P/i2pd-android/releases/download/2.61.0/i2pd_2.61.0_android_binary.zip",
+      "fileName": "i2pd-android.zip",
+      "archive": true,
+      "archiveFormat": "zip",
+      "binaryName": "i2pd",
+      "version": "2.61.0",
+      "architecture": "android-arm64"
+    },
+    {
+      "id": "warp",
+      "name": "Cloudflare WARP (wgcf)",
+      "description": "ViRb3/wgcf — unofficial CLI for Cloudflare WARP. Generates WireGuard config from your WARP account. The config is then run by the sing-box/WireGuard core. NOTE: wgcf has no android-arm64 build; this downloads the linux-arm64 binary which runs on Android via the app's exec environment, or use it to generate a config on a PC and import.",
+      "downloadUrl": "https://github.com/ViRb3/wgcf/releases/download/v2.2.32/wgcf_2.2.32_linux_arm64",
+      "fileName": "wgcf",
+      "archive": false,
+      "archiveFormat": "gz",
+      "binaryName": "wgcf",
+      "version": "2.2.32",
+      "architecture": "linux-arm64"
     }
   ]
 }

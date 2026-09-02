@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#07111F">
+    android:background="@color/background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,145 +13,131 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="MyVPN Pro"
-            android:textColor="#FFFFFF"
+            android:text="@string/app_name"
+            android:textColor="@color/text_primary"
             android:textSize="24sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/proficiencyText"
-            android:layout_width="wrap_content"
+            android:id="@+id/logTextView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Beginner • Tailored experience"
-            android:textColor="#8AB4F8"
-            android:layout_marginTop="4dp" />
+            android:layout_marginTop="8dp"
+            android:fontFamily="monospace"
+            android:text="@string/vpn_status"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="12dp">
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal">
 
             <Button
-                android:id="@+id/startStopButton"
+                android:id="@+id/vpn_toggle_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="START VPN" />
+                android:text="@string/connect" />
 
             <Button
-                android:id="@+id/oobeButton"
+                android:id="@+id/settings_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Setup Guide"
-                android:layout_marginStart="8dp" />
+                android:layout_marginStart="8dp"
+                android:text="@string/settings" />
+
+            <Button
+                android:id="@+id/connections_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:text="@string/connections" />
         </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:text="Live tunnel oscilloscope"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp" />
+            android:textColor="@color/text_primary"
+            android:textStyle="bold" />
 
-        <com.multivpn.app.OscilloscopeView
+        <com.multivpn.app.ui.OscilloscopeView
             android:id="@+id/oscilloscopeView"
             android:layout_width="match_parent"
             android:layout_height="180dp"
             android:layout_marginTop="8dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Available plugins"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
 
-        <ListView
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:text="@string/plugin_title"
+                android:textColor="@color/text_primary"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/addCustomPluginButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/add_custom_plugin" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/addonListView"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:background="#0F172A"
-            android:dividerHeight="1dp"
-            android:layout_marginTop="8dp" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:nestedScrollingEnabled="false" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Connections"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="16dp"
+            android:text="@string/connection_stats"
+            android:textColor="@color/text_primary"
+            android:textStyle="bold" />
 
         <ListView
             android:id="@+id/connectionListView"
             android:layout_width="match_parent"
             android:layout_height="140dp"
-            android:background="#0F172A"
-            android:dividerHeight="1dp"
             android:layout_marginTop="8dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Professional settings"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="16dp"
+            android:orientation="vertical">
 
             <CheckBox
                 android:id="@+id/autoConnectCheckBox"
-                android:text="Auto-connect on launch"
-                android:textColor="#FFFFFF"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="Auto-connect on launch" />
 
             <CheckBox
                 android:id="@+id/killSwitchCheckBox"
-                android:text="Kill switch"
-                android:textColor="#FFFFFF"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="Kill switch" />
 
             <CheckBox
                 android:id="@+id/analyticsCheckBox"
-                android:text="Anonymous telemetry"
-                android:textColor="#FFFFFF"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Live log"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp" />
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="220dp"
-            android:background="#111111"
-            android:padding="8dp"
-            android:layout_marginTop="8dp">
-
-            <TextView
-                android:id="@+id/logTextView"
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp"
-                android:fontFamily="monospace" />
-        </ScrollView>
+                android:text="Anonymous telemetry" />
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>

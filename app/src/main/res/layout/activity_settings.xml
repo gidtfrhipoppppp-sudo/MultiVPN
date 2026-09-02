@@ -18,7 +18,20 @@
             android:background="@color/primary"
             app:titleTextColor="@color/white" />
 
+        <!-- Level badge -->
+        <TextView
+            android:id="@+id/levelBadgeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@color/surface"
+            android:padding="8dp"
+            android:textColor="@color/primary"
+            android:textStyle="bold" />
+
+        <!-- ===== BASIC section (always visible) ===== -->
         <androidx.cardview.widget.CardView
+            android:id="@+id/basicSection"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -34,20 +47,29 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Appearance"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_primary" />
+                    android:text="@string/section_appearance"
+                    android:textColor="@color/text_primary"
+                    android:textStyle="bold" />
 
                 <Switch
                     android:id="@+id/themeSwitch"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Dark theme" />
+                    android:text="@string/setting_dark_theme" />
+
+                <Switch
+                    android:id="@+id/killSwitchSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/setting_kill_switch" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
+        <!-- ===== INTERMEDIATE section ===== -->
         <androidx.cardview.widget.CardView
+            android:id="@+id/intermediateSection"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -63,51 +85,47 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Connection"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_primary" />
+                    android:text="@string/section_connection"
+                    android:textColor="@color/text_primary"
+                    android:textStyle="bold" />
 
                 <Switch
                     android:id="@+id/autoStartSwitch"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Auto start" />
+                    android:text="@string/setting_auto_start" />
 
                 <Switch
                     android:id="@+id/notificationsSwitch"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Notifications" />
-
-                <Switch
-                    android:id="@+id/debugModeSwitch"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Debug mode" />
+                    android:text="@string/setting_notifications" />
 
                 <EditText
                     android:id="@+id/dnsEdit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:hint="DNS" />
+                    android:hint="@string/hint_dns"
+                    android:inputType="text" />
 
                 <EditText
                     android:id="@+id/mtuEdit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:hint="MTU" />
+                    android:hint="@string/hint_mtu"
+                    android:inputType="number" />
 
                 <EditText
                     android:id="@+id/limitEdit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:hint="Data limit MB" />
+                    android:hint="@string/hint_data_limit"
+                    android:inputType="number" />
 
                 <Spinner
                     android:id="@+id/protocolSpinner"
@@ -118,11 +136,75 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
+        <!-- ===== PROFESSIONAL section ===== -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/professionalSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/section_advanced"
+                    android:textColor="@color/text_primary"
+                    android:textStyle="bold" />
+
+                <Switch
+                    android:id="@+id/debugModeSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/setting_debug_mode" />
+
+                <Switch
+                    android:id="@+id/bypassLanSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/setting_bypass_lan" />
+
+                <EditText
+                    android:id="@+id/perAppEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:hint="@string/hint_per_app"
+                    android:inputType="text" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/setting_custom_config"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="13sp" />
+
+                <EditText
+                    android:id="@+id/customConfigEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="top"
+                    android:hint="@string/hint_custom_config"
+                    android:inputType="textMultiLine"
+                    android:minLines="4" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
         <Button
             android:id="@+id/saveButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
-            android:text="Save" />
+            android:text="@string/save" />
     </LinearLayout>
 </ScrollView>

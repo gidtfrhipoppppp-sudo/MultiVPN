@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.BIND_VPN_SERVICE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
+        android:name="com.multivpn.app.MultiVpnApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="MyVPN"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        android:label="@string/app_name"
+        android:theme="@style/Theme.MultiVPN">
+
         <activity
-            android:name="com.multivpn.app.MainActivity"
+            android:name="com.multivpn.app.ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,10 +24,41 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name="com.multivpn.app.ui.SettingsActivity"
+            android:exported="false"
+            android:parentActivityName="com.multivpn.app.ui.MainActivity" />
+
+        <activity
+            android:name="com.multivpn.app.ui.ConnectionStatsActivity"
+            android:exported="false"
+            android:parentActivityName="com.multivpn.app.ui.MainActivity" />
+
+        <activity
+            android:name="com.multivpn.app.ui.OobeActivity"
+            android:exported="false" />
+
+        <activity
+            android:name="com.multivpn.app.ui.PluginInfoActivity"
+            android:exported="false" />
+
         <service
-            android:name="com.multivpn.app.VpnTunnelService"
+            android:name="com.multivpn.app.vpn.MultiVpnService"
             android:enabled="true"
             android:exported="false"
-            android:foregroundServiceType="dataSync" />
+            android:permission="android.permission.BIND_VPN_SERVICE">
+            <intent-filter>
+                <action android:name="android.net.VpnService" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name="com.multivpn.app.receiver.BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>
