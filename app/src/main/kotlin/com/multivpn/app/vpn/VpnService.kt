@@ -6,6 +6,9 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo
+import android.net.IpPrefix
+import java.net.InetAddress
 import android.net.VpnService as AndroidVpnService
 import android.os.Build
 import android.os.ParcelFileDescriptor
@@ -28,7 +31,13 @@ class MultiVpnService : AndroidVpnService() {
 
     override fun onCreate() {
         super.onCreate()
-        startForeground(NOTIFICATION_ID, buildNotification("Starting VPN..."))
+        val notification = buildNotification("Starting VPN...")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            // Android 14+ requires a declared foreground service type, otherwise the app crashes.
+            startForeground(NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
+        } else {
+            startForeground(NOTIFICATION_ID, notification)
+        }
         Timber.d("VPN Service created")
     }
 
@@ -89,11 +98,14 @@ class MultiVpnService : AndroidVpnService() {
             .addSearchDomain(DEFAULT_DOMAIN)
 
         if (prefs.bypassLan) {
-            // Allow LAN traffic to bypass the tunnel.
-            builder.addRoute("192.168.0.0", 16)
-            builder.addRoute("10.0.0.0", 8)
-            builder.addRoute("172.16.0.0", 12)
-            builder.allowFamily(android.system.OsConstants.AF_INET)
+            // Keep LAN traffic OUT of the tunnel (adding routes would pull it in).
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                builder.excludeRoute(IpPrefix(InetAddress.getByName("192.168.0.0"), 16))
+                builder.excludeRoute(IpPrefix(InetAddress.getByName("10.0.0.0"), 8))
+                builder.excludeRoute(IpPrefix(InetAddress.getByName("172.16.0.0"), 12))
+            } else {
+                Timber.w("LAN bypass requires Android 13+; ignoring on this device")
+            }
         }
 
         vpnInterface = builder.establish()
