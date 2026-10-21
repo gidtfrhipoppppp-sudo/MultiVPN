@@ -127,11 +127,13 @@ class MainActivity : AppCompatActivity() {
             "https://raw.githubusercontent.com/gidtfrhipoppppp-sudo/MultiVPN/main/Plugins/manifest.json"
         appendLog("Loading core catalogue from repository...")
         pluginRepository.fetchCatalog(manifestUrl) { result ->
-            result.onSuccess { cores ->
-                appendLog("Loaded ${cores.size} core(s): ${cores.joinToString { it.displayName }}")
-                runOnUiThread { pluginAdapter.update(pluginRepository.statuses()) }
-            }.onFailure { error ->
-                appendLog("Could not load catalogue: ${error.message}")
+            runOnUiThread {
+                result.onSuccess { cores ->
+                    appendLog("Loaded ${cores.size} core(s): ${cores.joinToString { it.displayName }}")
+                    pluginAdapter.update(pluginRepository.statuses())
+                }.onFailure { error ->
+                    appendLog("Could not load catalogue: ${error.message}")
+                }
             }
         }
     }
